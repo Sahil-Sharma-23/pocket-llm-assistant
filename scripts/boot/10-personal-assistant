@@ -1,0 +1,32 @@
+#!/data/data/com.termux/files/usr/bin/sh
+# Termux:Boot hook. Install with:
+#   bash scripts/termux-setup.sh --install-boot   (substitutes the right PA_HOME)
+# or manually:
+#   mkdir -p ~/.termux/boot && cp scripts/boot/10-personal-assistant ~/.termux/boot/
+#   chmod 700 ~/.termux/boot/10-personal-assistant   (then fix PA_HOME below)
+#
+# Termux:Boot runs every executable in ~/.termux/boot/ after the device boots
+# (the Termux:Boot app must have been opened once). Unlike a Termux session,
+# that environment does NOT load termux-exec, so "#!/usr/bin/env bash" scripts
+# fail with "not found" (Android has no /usr/bin/env). We therefore recreate
+# the session environment and call every script through bash explicitly.
+export PREFIX="${PREFIX:-/data/data/com.termux/files/usr}"
+export HOME="${HOME:-/data/data/com.termux/files/home}"
+export PATH="$PREFIX/bin:$PATH"
+for lib in libtermux-exec-ld-preload.so libtermux-exec.so; do
+  if [ -f "$PREFIX/lib/$lib" ]; then
+    export LD_PRELOAD="$PREFIX/lib/$lib"
+    break
+  fi
+done
+# Rewritten to the real checkout path by `scripts/termux-setup.sh --install-boot`.
+PA_HOME="$HOME/personal-assistant"
+export PA_HOME
+mkdir -p "$PA_HOME/logs"
+{
+  echo "$(date '+%Y-%m-%dT%H:%M:%S%z') boot hook (LD_PRELOAD=${LD_PRELOAD:-none})"
+  # Keeps the CPU awake so reminders/monitors/Telegram work with screen off.
+  termux-wake-lock || echo "termux-wake-lock failed"
+  "$PREFIX/bin/bash" "$PA_HOME/scripts/start.sh"
+  "$PREFIX/bin/bash" "$PA_HOME/scripts/watchdog.sh" --daemon
+} >>"$PA_HOME/logs/boot.log" 2>&1

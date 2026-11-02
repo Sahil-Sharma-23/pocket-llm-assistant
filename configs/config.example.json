@@ -1,0 +1,98 @@
+{
+  "timezone": "",
+  "server": {
+    "addr": "127.0.0.1:8787",
+    "read_header_timeout": "5s",
+    "read_timeout": "15s",
+    "write_timeout": "30s",
+    "idle_timeout": "60s",
+    "shutdown_timeout": "15s"
+  },
+  "log": {
+    "level": "info",
+    "format": "json",
+    "file": "assistant.log",
+    "max_size_mb": 10,
+    "max_backups": 5
+  },
+  "runtime": {
+    "memory_limit_mb": 256,
+    "max_procs": 2
+  },
+  "paths": {
+    "data_dir": "data",
+    "log_dir": "logs",
+    "backup_dir": "backups",
+    "models_dir": "models"
+  },
+  "database": {
+    "path": "assistant.db",
+    "busy_timeout": "5s"
+  },
+  "llm": {
+    "provider": "llamacpp",
+    "base_url": "http://127.0.0.1:8080",
+    "model": "gemma-4-E2B-it-qat-q4_0 (google, official)",
+    "request_timeout": "240s",
+    "max_tokens": 384,
+    "temperature": 0.2,
+    "context_size": 4096,
+    "max_queue": 4,
+    "min_free_mem_mb": 250,
+    "server": {
+      "managed": true,
+      "binary": "llama-server",
+      "model_path": "gemma-4-E2B_q4_0-it.gguf",
+      "threads": 4,
+      "threads_batch": 8,
+      "sleep_idle_seconds": 900,
+      "startup_timeout": "240s",
+      "min_free_mem_mb_to_start": 1200,
+      "extra_args": [],
+      "log_file": "llama-server.log",
+      "restart_backoff": "10s"
+    }
+  },
+  "agents": {
+    "max_steps": 3,
+    "history_messages": 6,
+    "max_concurrent_runs": 2,
+    "run_timeout": "10m",
+    "approval_ttl": "24h"
+  },
+  "telegram": {
+    "enabled": false,
+    "token_env": "PA_TELEGRAM_TOKEN",
+    "allowed_user_ids": [],
+    "poll_timeout": "50s",
+    "api_base_url": "https://api.telegram.org"
+  },
+  "scheduler": {
+    "max_workers": 2,
+    "max_idle_sleep": "5m",
+    "daily_plan_time": "08:00"
+  },
+  "developer": {
+    "github_repos": [],
+    "github_token_env": "PA_GITHUB_TOKEN",
+    "github_api_url": "https://api.github.com",
+    "digest_time": "",
+    "monitors": []
+  },
+  "research": {
+    "enabled": true,
+    "providers": ["duckduckgo", "wikipedia"],
+    "max_results": 5,
+    "fetch_max_bytes": 524288,
+    "timeout": "20s",
+    "user_agent": "personal-assistant/0.1 (local-first research agent)"
+  },
+  "backup": {
+    "interval": "24h",
+    "keep": 7
+  },
+  "resources": {
+    "sample_interval": "60s",
+    "warn_mem_available_mb": 500
+  }
+}
