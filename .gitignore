@@ -1,0 +1,18 @@
+bin/
+data/
+logs/
+models/
+run/
+backups/
+configs/config.json
+configs/secrets.env
+*.db
+*.db-*
+
+# Model weights, OS and editor files
+*.gguf
+.DS_Store
+.idea/
+.vscode/
+# Claude Code per-user settings (shared commands in .claude/commands are tracked)
+.claude/settings.local.json
