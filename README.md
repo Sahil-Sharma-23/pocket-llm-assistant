@@ -63,8 +63,8 @@ the Telegram bot** (it needs your Telegram account).
 4. Clone this repository and start Claude Code in it:
 
    ```sh
-   git clone https://github.com/<you>/personal-agent.git   # replace with this repo's URL
-   cd personal-agent
+   git clone https://github.com/Sahil-Sharma-23/pocket-llm-assistant.git
+   cd pocket-llm-assistant
    claude
    ```
 
@@ -95,7 +95,7 @@ You can run it again later to update the code.
 
    ```sh
    pkg install -y git
-   git clone https://github.com/<you>/personal-agent.git ~/personal-assistant
+   git clone https://github.com/Sahil-Sharma-23/pocket-llm-assistant.git ~/personal-assistant
    cd ~/personal-assistant
    bash scripts/termux-setup.sh --with-model --install-boot
    ```
