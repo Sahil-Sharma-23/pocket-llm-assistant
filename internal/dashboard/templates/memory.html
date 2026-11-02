@@ -1,0 +1,19 @@
+{{define "content"}}
+<h2>Knowledge</h2>
+<form method="get" class="send"><input name="q" value="{{.Query}}" placeholder="Search knowledge (FTS5)"><button>Search</button></form>
+<p class="small">Source <span class="tag user">user</span> = told by you · <span class="tag research">research</span> = external (web) information.</p>
+<table>
+<tr><th>#</th><th>Title</th><th>Content</th><th>Source</th><th>Saved</th></tr>
+{{if .Query}}
+{{range .Hits}}<tr><td>{{.ID}}</td><td>{{.Title}}</td><td class="small">{{.Snippet}}</td><td><span class="tag {{.Source}}">{{.Source}}</span>{{if .URL}} <a href="{{.URL}}" rel="noreferrer">link</a>{{end}}</td><td>{{t .CreatedAt}}</td></tr>
+{{else}}<tr><td colspan="5" class="muted">No matches.</td></tr>{{end}}
+{{else}}
+{{range .Entries}}<tr><td>{{.ID}}</td><td>{{.Title}}</td><td class="small">{{clip .Body 200}}</td><td><span class="tag {{.Source}}">{{.Source}}</span>{{if .URL}} <a href="{{.URL}}" rel="noreferrer">link</a>{{end}}</td><td>{{t .CreatedAt}}</td></tr>
+{{else}}<tr><td colspan="5" class="muted">Nothing saved yet. Use /note or ask the assistant to remember something.</td></tr>{{end}}
+{{end}}
+</table>
+<h2>Preferences</h2>
+<table><tr><th>Key</th><th>Value</th><th>Updated</th></tr>
+{{range .Preferences}}<tr><td>{{.Key}}</td><td>{{.Value}}</td><td>{{t .UpdatedAt}}</td></tr>{{else}}<tr><td colspan="3" class="muted">none</td></tr>{{end}}
+</table>
+{{end}}

@@ -1,0 +1,16 @@
+{{define "content"}}
+{{with .Run}}
+<h2>Run #{{.ID}} · {{.Agent}} <span class="tag st-{{.Status}}">{{.Status}}</span></h2>
+<p class="small">trigger {{.Trigger}} · started {{t .StartedAt}} · {{.DurationMS}} ms · {{.LLMCalls}} LLM calls · {{.PromptTokens}} prompt / {{.CompletionTokens}} generated tokens</p>
+<div class="card"><b>Input</b><pre>{{.Input}}</pre></div>
+<div class="card"><b>Output</b><pre>{{.Output}}</pre></div>
+{{if .Error}}<div class="card bad"><b>Error</b><pre>{{.Error}}</pre></div>{{end}}
+{{end}}
+<h3>Tool calls</h3>
+<table>
+<tr><th>Tool</th><th>Permission</th><th>Status</th><th>Args</th><th>Result / error</th><th>Attempts</th><th>ms</th></tr>
+{{range .Calls}}<tr><td>{{.Tool}}</td><td><span class="tag {{.Permission}}">{{.Permission}}</span></td><td><span class="tag st-{{.Status}}">{{.Status}}</span></td>
+<td><code>{{clip .Args 200}}</code></td><td class="small">{{clip .Result 300}} {{.Error}}</td><td>{{.Attempts}}</td><td>{{.DurationMS}}</td></tr>
+{{else}}<tr><td colspan="7" class="muted">No tool calls.</td></tr>{{end}}
+</table>
+{{end}}

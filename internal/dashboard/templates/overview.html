@@ -1,0 +1,53 @@
+{{define "content"}}
+{{with .Status}}
+<section class="grid">
+  <div class="card {{if eq .Health.Status "ok"}}ok{{else}}bad{{end}}">
+    <h3>Health</h3>
+    <p class="big">{{.Health.Status}}</p>
+    {{range .Health.Checks}}<div class="small">{{.Name}}: {{.Status}} {{.Error}}</div>{{end}}
+    <div class="small">version {{.Version}} · up {{.Uptime}}</div>
+  </div>
+  <div class="card">
+    <h3>Local model</h3>
+    <p class="big">{{if .LLMManaged}}{{.LLMState}}{{else}}external{{end}}</p>
+    <div class="small">{{.Model}}</div>
+    {{if .LLMPID}}<div class="small">pid {{.LLMPID}} · restarts {{.LLMRestarts}}</div>{{end}}
+    <div class="small">requests {{.LLM.Requests}} · errors {{.LLM.Errors}} · rejected {{.LLM.Rejected}} · queued {{.LLM.Queued}}</div>
+    {{if .LLM.LastLatencyMS}}<div class="small">last {{.LLM.LastLatencyMS}} ms · prompt {{printf "%.1f" .LLM.LastUsage.PromptPerSec}} tok/s · gen {{printf "%.1f" .LLM.LastUsage.GenPerSec}} tok/s</div>{{end}}
+    {{if .LLMError}}<div class="small err">{{.LLMError}}</div>{{end}}
+    {{if .LLM.LastError}}<div class="small err">{{.LLM.LastError}}</div>{{end}}
+  </div>
+  <div class="card">
+    <h3>Memory</h3>
+    <p class="big">{{.MemAvailableMB}} MB free</p>
+    <div class="small">of {{.MemTotalMB}} MB · assistant {{.SelfRSSMB}} MB</div>
+    {{if .LlamaRSSMB}}<div class="small">llama-server {{.LlamaRSSMB}} MB ({{.LlamaAnonMB}} MB non-reclaimable)</div>{{end}}
+  </div>
+  <div class="card">
+    <h3>Interfaces</h3>
+    <div>Telegram: {{if .TelegramEnabled}}enabled{{else}}disabled{{end}}</div>
+    <div>Scheduler: {{.SchedulerRunning}} running · last {{tt .SchedulerLastRun}}</div>
+  </div>
+</section>
+{{end}}
+<section class="grid">
+  <div class="card"><h3>Counts</h3>
+    <div>{{.Stats.PendingTasks}} pending tasks · {{.Stats.PendingApprovals}} pending approvals</div>
+    <div>{{.Stats.Conversations}} conversations · {{.Stats.Messages}} messages</div>
+    <div>{{.Stats.Knowledge}} knowledge entries · {{.Stats.Jobs}} active jobs · {{.Stats.Runs}} runs</div>
+  </div>
+  <div class="card"><h3>Pending approvals</h3>
+    {{range .Approvals}}<div>#{{.ID}} <span class="tag {{.Permission}}">{{.Permission}}</span> {{.Summary}}</div>{{else}}<div class="muted">none</div>{{end}}
+    {{if .Approvals}}<a href="/approvals">review →</a>{{end}}
+  </div>
+  <div class="card"><h3>Recent notifications</h3>
+    {{range .Notifications}}<div class="small">{{t .CreatedAt}} — {{clip .Content 140}}</div>{{else}}<div class="muted">none</div>{{end}}
+  </div>
+</section>
+<h2>Agents</h2>
+<table>
+<tr><th>Agent</th><th>Handles</th><th>Tools (permission)</th></tr>
+{{range .Agents}}<tr><td><b>{{.Name}}</b></td><td>{{.Description}}</td>
+<td>{{range $t, $p := .Perms}}<span class="tag {{$p}}">{{$t}}</span> {{end}}</td></tr>{{end}}
+</table>
+{{end}}

@@ -1,0 +1,16 @@
+{{define "content"}}
+<h2>Scheduled jobs</h2>
+<table>
+<tr><th>#</th><th>Kind</th><th>Name</th><th>Schedule</th><th>Next run</th><th>Last run</th><th>Last result</th></tr>
+{{range .Jobs}}<tr class="{{if not .Enabled}}muted{{end}}"><td>{{.ID}}</td><td>{{.Kind}}</td><td>{{.Name}}</td><td>{{.Schedule}}{{if not .Enabled}} (done/disabled){{end}}</td>
+<td>{{if .Enabled}}{{tt .NextRunAt}}{{else}}—{{end}}</td><td>{{tp .LastRunAt}}</td><td><span class="tag st-{{.LastStatus}}">{{.LastStatus}}</span> <span class="small">{{clip .LastError 100}}</span></td></tr>
+{{else}}<tr><td colspan="7" class="muted">No jobs.</td></tr>{{end}}
+</table>
+<h2>Monitors (24h)</h2>
+<table>
+<tr><th>Monitor</th><th>Uptime</th><th>Checks</th><th>Avg latency</th><th>Last</th></tr>
+{{range .Monitors}}<tr><td>{{.Monitor}}</td><td>{{printf "%.1f" .UptimePct}}%</td><td>{{.Checks}}</td><td>{{printf "%.0f" .AvgLatencyMS}} ms</td>
+<td>{{if .Last.OK}}🟢{{else}}🔴 {{.Last.Error}}{{end}} {{t .Last.CheckedAt}}</td></tr>
+{{else}}<tr><td colspan="5" class="muted">No monitors configured (developer.monitors).</td></tr>{{end}}
+</table>
+{{end}}

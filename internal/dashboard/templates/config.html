@@ -1,0 +1,10 @@
+{{define "content"}}
+<h2>Effective configuration</h2>
+<p class="small">Read-only. Edit <code>configs/config.json</code> and restart. Secrets are never stored in config; only the names of the environment variables that hold them.</p>
+<pre>{{.Config}}</pre>
+<h2>Tool registry</h2>
+<table>
+<tr><th>Tool</th><th>Permission</th><th>Timeout</th><th>Retries</th><th>Description</th></tr>
+{{range .Tools}}<tr><td>{{.Name}}</td><td><span class="tag {{.Permission}}">{{.Permission}}</span></td><td>{{.Timeout}}</td><td>{{.Retry.Attempts}}</td><td>{{.Description}}</td></tr>{{end}}
+</table>
+{{end}}

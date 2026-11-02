@@ -1,0 +1,9 @@
+{{define "content"}}
+<h2>Execution log</h2>
+<table>
+<tr><th>#</th><th>Agent</th><th>Trigger</th><th>Status</th><th>Input</th><th>LLM calls</th><th>Tokens (prompt/gen)</th><th>Duration</th><th>Started</th></tr>
+{{range .Runs}}<tr><td><a href="/runs/{{.ID}}">{{.ID}}</a></td><td>{{.Agent}}</td><td>{{.Trigger}}</td><td><span class="tag st-{{.Status}}">{{.Status}}</span></td>
+<td><a href="/runs/{{.ID}}">{{clip .Input 60}}</a></td><td>{{.LLMCalls}}</td><td>{{.PromptTokens}}/{{.CompletionTokens}}</td><td>{{.DurationMS}} ms</td><td>{{t .StartedAt}}</td></tr>
+{{else}}<tr><td colspan="9" class="muted">No runs yet.</td></tr>{{end}}
+</table>
+{{end}}

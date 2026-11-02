@@ -1,0 +1,6 @@
+{{define "content"}}
+<h2>Logs <span class="small">{{.File}} (newest first, last 200 lines)</span></h2>
+{{if .Error}}<p class="err">{{.Error}}</p>{{end}}
+<pre class="logs">{{range .Lines}}{{.}}
+{{end}}</pre>
+{{end}}

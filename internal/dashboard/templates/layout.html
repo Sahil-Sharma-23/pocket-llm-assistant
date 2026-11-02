@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{if .Pending}}<meta http-equiv="refresh" content="3">{{end}}
+<title>Assistant · {{.Page}}</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <strong>🤖 Local Assistant</strong>
+  <nav>
+    <a href="/" {{if eq .Page "overview"}}class="on"{{end}}>Overview</a>
+    <a href="/chat" {{if eq .Page "chat"}}class="on"{{end}}>Chat</a>
+    <a href="/approvals" {{if eq .Page "approvals"}}class="on"{{end}}>Approvals</a>
+    <a href="/tasks" {{if eq .Page "tasks"}}class="on"{{end}}>Tasks</a>
+    <a href="/conversations" {{if or (eq .Page "conversations") (eq .Page "conversation")}}class="on"{{end}}>History</a>
+    <a href="/memory" {{if eq .Page "memory"}}class="on"{{end}}>Memory</a>
+    <a href="/jobs" {{if eq .Page "jobs"}}class="on"{{end}}>Jobs</a>
+    <a href="/runs" {{if or (eq .Page "runs") (eq .Page "run")}}class="on"{{end}}>Runs</a>
+    <a href="/logs" {{if eq .Page "logs"}}class="on"{{end}}>Logs</a>
+    <a href="/config" {{if eq .Page "config"}}class="on"{{end}}>Config</a>
+  </nav>
+</header>
+<main>
+{{template "content" .}}
+</main>
+<footer>{{.Now}} · runs entirely on this phone · <a href="/healthz">/healthz</a></footer>
+</body>
+</html>

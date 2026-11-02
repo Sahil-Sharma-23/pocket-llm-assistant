@@ -1,0 +1,18 @@
+{{define "content"}}
+<h2>Pending approvals</h2>
+{{if .Flash}}<p class="flash">{{.Flash}}</p>{{end}}
+{{range .Pending}}
+<div class="card">
+  <div><b>#{{.ID}}</b> <span class="tag {{.Permission}}">{{.Permission}}</span> {{.Summary}}</div>
+  <div class="small">tool {{.Tool}} · args <code>{{.Args}}</code> · requested {{t .CreatedAt}} via {{.Channel}} · expires {{t .ExpiresAt}}</div>
+  <form method="post" action="/approvals/{{.ID}}/approve" class="inline"><input type="hidden" name="csrf" value="{{$.CSRF}}"><button class="ok">Approve</button></form>
+  <form method="post" action="/approvals/{{.ID}}/reject" class="inline"><input type="hidden" name="csrf" value="{{$.CSRF}}"><button class="bad">Reject</button></form>
+</div>
+{{else}}<p class="muted">Nothing awaiting approval.</p>{{end}}
+<h2>History</h2>
+<table>
+<tr><th>#</th><th>Status</th><th>Action</th><th>Requested</th><th>Decided</th><th>Result</th></tr>
+{{range .All}}<tr><td>{{.ID}}</td><td><span class="tag st-{{.Status}}">{{.Status}}</span></td><td>{{.Summary}}</td>
+<td>{{t .CreatedAt}}</td><td>{{tp .DecidedAt}} {{.DecidedBy}}</td><td class="small">{{clip .Result 80}}{{.Error}}</td></tr>{{end}}
+</table>
+{{end}}

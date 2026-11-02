@@ -1,0 +1,15 @@
+{{define "content"}}
+<h2>Conversation history</h2>
+<form method="get" class="send"><input name="q" value="{{.Query}}" placeholder="Full-text search (FTS5)"><button>Search</button></form>
+{{if .Query}}
+<h3>Results for “{{.Query}}”</h3>
+{{range .Hits}}<div class="card small"><a href="/conversations/{{.ConversationID}}">{{.Channel}} #{{.ConversationID}}</a> · {{.Role}} · {{t .CreatedAt}}<br>{{.Snippet}}</div>
+{{else}}<p class="muted">No matches.</p>{{end}}
+{{end}}
+<table>
+<tr><th>#</th><th>Channel</th><th>Title</th><th>Messages</th><th>Last activity</th></tr>
+{{range .Conversations}}<tr><td><a href="/conversations/{{.ID}}">{{.ID}}</a></td><td>{{.Channel}}</td>
+<td><a href="/conversations/{{.ID}}">{{if .Title}}{{.Title}}{{else}}{{.ExternalID}}{{end}}</a></td><td>{{.Messages}}</td><td>{{t .UpdatedAt}}</td></tr>
+{{else}}<tr><td colspan="5" class="muted">No conversations yet.</td></tr>{{end}}
+</table>
+{{end}}

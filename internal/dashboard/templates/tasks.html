@@ -1,0 +1,9 @@
+{{define "content"}}
+<h2>Tasks</h2>
+<table>
+<tr><th>#</th><th>Status</th><th>P</th><th>Title</th><th>Due</th><th>Created</th><th>Completed</th></tr>
+{{range .Tasks}}<tr class="{{.Status}}"><td>{{.ID}}</td><td><span class="tag st-{{.Status}}">{{.Status}}</span></td><td>{{.Priority}}</td>
+<td>{{.Title}}{{if .Notes}}<div class="small">{{.Notes}}</div>{{end}}</td><td>{{tp .DueAt}}</td><td>{{t .CreatedAt}}</td><td>{{tp .CompletedAt}}</td></tr>
+{{else}}<tr><td colspan="7" class="muted">No tasks. Add one in Chat with /task.</td></tr>{{end}}
+</table>
+{{end}}

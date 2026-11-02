@@ -1,0 +1,16 @@
+{{define "content"}}
+<h2>Chat</h2>
+<div class="chat">
+{{range .Messages}}
+  <div class="msg {{.Role}}"><div class="meta">{{.Role}}{{if .Agent}} · {{.Agent}}{{end}} · {{t .CreatedAt}}</div>{{.Content}}</div>
+{{else}}<p class="muted">No messages yet. Try “remind me to stretch in 30 minutes” or /help.</p>{{end}}
+{{if .Pending}}<div class="msg assistant thinking">Thinking on the local model… (this page refreshes automatically)</div>{{end}}
+</div>
+{{if .Error}}<p class="err">{{.Error}}</p>{{end}}
+{{if .Approvals}}<p><a href="/approvals">{{len .Approvals}} action(s) awaiting your approval →</a></p>{{end}}
+<form method="post" action="/chat" class="send">
+  <input type="hidden" name="csrf" value="{{.CSRF}}">
+  <input name="text" placeholder="Message or /command" autocomplete="off" autofocus {{if .Pending}}disabled{{end}}>
+  <button {{if .Pending}}disabled{{end}}>Send</button>
+</form>
+{{end}}
